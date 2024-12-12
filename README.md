@@ -69,21 +69,33 @@ You could get creative and ask the LLM to generate the code for your chart based
 Notes:
 
 1.Export as PNG. Save all your charts as PNG files (with different file names) in the current directory.
+
 2.Don't send the entire analysis to the LLM. You might run out of tokens. Send only what might be significant analysis.
 Narrate a story
-Use the LLM to write a story about your analysis. You can pass it your data structure, analysis, and even your charts. Have it describe:
+
+3. Use the LLM to write a story about your analysis. You can pass it your data structure, analysis, and even your charts. Have it describe:
 
 The data you received, briefly
+
 The analysis you carried out
+
 The insights you discovered
+
 The implications of your findings (i.e. what to do with the insights)
+
 Save this as README.md.
 
 Notes:
 Keep images small. 512x512 px images are ideal. That's the size of 1 tile. Or, send detail: low to reduce cost. Read the LLM Vision Models module and the OpenAI Vision API docs
-Submit your script
-Create a new public repository in your GitHub account with an MIT license.
-Add your code: autolysis.py
-Create directories called goodreads/, happiness/, and media/.
-Run your script on the respective CSV files and commit the output in that directory. (Don't commit the input CSVs. Just README.md and *.png files.)
-Commit and push these.
+
+1.Submit your script
+
+2.Create a new public repository in your GitHub account with an MIT license.
+
+3.Add your code: autolysis.py
+
+4.Create directories called goodreads/, happiness/, and media/.
+
+5. Run your script on the respective CSV files and commit the output in that directory. (Don't commit the input CSVs. Just README.md and *.png files.)
+   
+6.Commit and push these.
