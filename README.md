@@ -73,7 +73,7 @@ Notes:
 2.Don't send the entire analysis to the LLM. You might run out of tokens. Send only what might be significant analysis.
 Narrate a story
 
-3. Use the LLM to write a story about your analysis. You can pass it your data structure, analysis, and even your charts. Have it describe:
+3.Use the LLM to write a story about your analysis. You can pass it your data structure, analysis, and even your charts. Have it describe:
 
 The data you received, briefly
 
