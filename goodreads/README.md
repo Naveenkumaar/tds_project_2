@@ -1,7 +1,7 @@
-# 1.Data Overview
+# 1.Dataset Overview
 The dataset contains 10,000 records of books listed on Goodreads. Key attributes include book_id, goodreads_book_id, average_rating, ratings_count, books_count, work_ratings_count, and the original publication year. The average rating across the dataset is approximately 4.00, indicating that most books are rated positively. Ratings count ranges from 2,716 to 4,780,653, showcasing significant variation and highlighting certain books with notably high engagement.
 
-# 2.Analysis Conducted
+# 2.Analysis Summary
 The primary analysis focused on examining the relationship between average ratings and the count of ratings received. This involved visualizing correlations and distributions to understand patterns and trends, particularly how average ratings interact with book popularity as measured by ratings count.
 
 # 3.Key Insights
