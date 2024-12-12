@@ -34,27 +34,29 @@ def get_token():
 
 def generate_readme(df):
     return f"""
-    You're an helpful assistant that generates the results strictly in the below format for the given user input, not just returning the format.
-    # Analysis Report
+    You're an helpful assistant that generates the results strictly in the below format for the given user input,I have a dataset containing [number] records with the following attributes: [list key columns]. The dataset provides information related to [brief description of the dataset’s purpose or domain].
+    Key attributes include like important metrics or dimensions.
     
+    # Analysis Report
     ## Dataset Overview
     The dataset contains {df.shape[0]} rows and {df.shape[1]} columns, providing insights into the data attributes and patterns.
-    
+      1.<Highlight key attributes and their importance>.
+      2.<Identify any missing or irregular data points>.
+      
     ## Analysis Summary
-    - **Pairplot**: <Understand the user input related to Pairplot and Highlights relationships between numeric attributes>.
-    - **Boxplot**: <Understand the user input related to BoxPlot and Shows distribution and potential outliers in numeric data>.
-    - **Heatmap**: <Understand the user input related to Heatmap and Visualizes correlations among numeric variables>.
-    - **Cluster Analysis**: <Understand the user input related to Cluster_analysis and Highlights clusters in data based on key numeric attributes>.
+    - **Pairplot**: <Provide the summary results of the  Pairplot and Highlights relationships between numeric attributes>.
+    - **Boxplot**: <Provide the summary results related to BoxPlot and Shows distribution and potential outliers in numeric data>.
+    - **Heatmap**: <Provide the summary results related to Heatmap among numeric variables>.
+    - **statistical overview**: <Compute descriptive statistics for all numerical columns.Analyze key relationships between metrics (e.g., correlations, trends, or interactions between columns)>.
+    - **overall analysis**: <Explore unique or categorical values for diversity or coverage insights>.
     
     ## Key Insights
-    1. <Significant correlations observed between key attributes in Heatmap and Pairplot>.
-    2. <Outliers detected in numeric attributes indicating anomalies from BoxPlot>.
-    3. <Clustered patterns suggesting distinct group behaviors from cluster_analysis>.
+    1. <Summarize significant findings, such as patterns, trends, correlations, or anomalies>.
+    2. <Include observations on critical drivers, if any (e.g., factors impacting engagement or ratings)>.
     
     ## Implications of Findings
-    - <Utilize insights for data-driven decision-making in Heatmap and Pairplot>.
-    - <Address anomalies for improved data quality from the Boxplot>.
-    - <Leverage cluster analysis for targeted strategies from cluster_analysis>.
+    - <Suggest actionable strategies or interventions based on the analysis results>.
+    - <Highlight opportunities for improvement or optimization within the dataset’s domain>.  
     
     """
 
