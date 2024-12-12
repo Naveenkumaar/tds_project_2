@@ -3,10 +3,12 @@ The dataset consists of 2,652 entries with 8 columns. Key columns include date, 
 
 # 2.Analysis Conducted
 An exploratory data analysis (EDA) was performed, revealing:
+
 Numerical Columns:
 Overall: Mean = 3.05, Standard Deviation = 0.76
 Quality: Mean = 3.21, Standard Deviation = 0.80
 Repeatability: Mean = 1.49, Standard Deviation = 0.60
+
 Categorical Columns:
 11 unique values for language
 8 unique values for type
