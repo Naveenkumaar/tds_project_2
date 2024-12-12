@@ -1,35 +1,20 @@
-# 1.Data Overview
-The dataset consists of 2,652 entries with 8 columns. Key columns include date, language, type, title, by, and numerical ratings for overall, quality, and repeatability. Notably, there are missing values in the date (99 missing) and by (262 missing) columns, indicating areas for potential data cleansing or further investigation.
+# Analysis Report
 
-# 2.Analysis Conducted
-An exploratory data analysis (EDA) was performed, revealing:
+## Dataset Overview
+The dataset contains 2652 rows and 9 columns, providing insights into the data attributes and patterns.
 
-Numerical Columns:
+## Analysis Summary
+- **Pairplot**: The pairplot reveals relationships among the variables "overall," "quality," and "repeatability," showcasing distribution and potential clustering patterns.
+- **Boxplot**: The boxplot highlights the distribution of numeric attributes, indicating outliers and overall spread of the "overall," "quality," and "repeatability" ratings.
+- **Heatmap**: The heatmap visualizes pairwise correlations, showing varying relationships and distributions among the three main numeric attributes.
+- **Cluster Analysis**: The cluster analysis reflects clustering tendencies, suggesting how different ratings for overall satisfaction relate to perceived quality and repeatability.
 
-Overall: Mean = 3.05, Standard Deviation = 0.76
+## Key Insights
+1. Significant correlations observed between key attributes in the heatmap and pairplot suggest a nuanced relationship between overall ratings and quality, while repeatability appears more constant.
+2. Outliers detected in numeric attributes indicate anomalies in the "quality" and "overall" ratings leading to concerns regarding data consistency.
+3. Clustered patterns from the cluster analysis suggest distinct group behaviors in user satisfaction levels, warranting further exploration.
 
-Quality: Mean = 3.21, Standard Deviation = 0.80
-
-Repeatability: Mean = 1.49, Standard Deviation = 0.60
-
-Categorical Columns:
-
-11 unique values for language
-
-8 unique values for type
-
-2,312 unique values for title
-
-1,528 unique contributors in by
-
-# 3.Insights Discovered
-Most entries received mid-range ratings for overall and quality, indicating general satisfaction among users.
-Lower average ratings for repeatability suggest that users may not frequently revisit the content, potentially indicating issues with long-term engagement.
-# 4.Implications of Findings
-Enhancing Engagement: Improve user engagement by creating more revisitable and engaging content.
-User Feedback: Focus on feedback from users who provided low repeatability ratings to identify specific areas for improvement.
-
-Personalization Strategies: Implement recommendation systems to deliver personalized suggestions, enhancing retention and user satisfaction.
-
-Data Quality: Address missing values in key columns to ensure data completeness and reliability for future analysis
-
+## Implications of Findings
+- Utilize insights from the heatmap and pairplot for data-driven decision-making, particularly in understanding how satisfaction scores relate to quality perceptions.
+- Address anomalies indicated by the boxplot for improved data quality, aiming for more accurate representations of user ratings.
+- Leverage cluster analysis for targeted strategies in enhancing user satisfaction, possibly designing interventions based on identified group behaviors.
