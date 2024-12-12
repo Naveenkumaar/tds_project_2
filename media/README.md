@@ -1,8 +1,8 @@
 ### 1. Data Overview
-he dataset consists of 2652 entries with 8 columns. The key columns include date, language, type, title, by, and numerical ratings of overall, quality, and repeatability. Notably, there are missing values in the date and by columns, indicating areas for potential data cleansing or further investigation.
+The dataset consists of 2652 entries with 8 columns. The key columns include date, language, type, title, by, and numerical ratings of overall, quality, and repeatability. Notably, there are missing values in the date and by columns, indicating areas for potential data cleansing or further investigation.
 
 ### 2. Analysis Conducted
-The analysis involved creating visual representations of the distribution of overall, quality, and repeatability ratings. Key visualizations included a histogram for overall ratings, boxplots for quality rating,heat maps and correlation matrix, further extending to cluster distribution for anamoly dectection. Each chart provided insights into how ratings were distributed, highlighting concentrations of scores and trends in user sentiments.
+The analysis involved creating visual representations of the distribution of overall, quality, and repeatability ratings.standard deviations for overall (mean = ~3.05), quality (mean = ~3.21), and repeatability (mean = ~1.49). Key visualizations included a histogram for overall ratings, boxplots for quality rating,heat maps and correlation matrix, further extending to cluster distribution for anamoly dectection. Then, categorical columns were assessed for unique value counts, highlighting a diverse range of entities across different categories (e.g., 1528 unique contributors in by, and 2312 unique titles).
 
 ### 3. Insights Discovered
 
@@ -14,10 +14,7 @@ The analysis involved creating visual representations of the distribution of ove
 The insights suggest several potential actions:
 - Focus on improving specific operational metrics for better outcomes.
 - Utilize the identified clusters for personalized strategies.
-- Investigate outliers to address potential issues or opportunities.
-- **Customer Experiemnce**: Since the overall ratings cluster around 3, there's an opportunity for businesses to focus on improving the factors contributing to average ratings by soliciting specific user feedback on what needs enhancement.
-- **Targeted Marketing**: The insights about moderate ratings can help create targeted marketing campaigns that emphasize strengths seen in quality ratings while addressing areas for improvement to uplift overall user experience.
-- **Customer Engagement**: Engaging customers who rated products negatively or neutrally could provide valuable insights into their experiences, thereby improving retention and satisfaction levels. 
-
+- Investigate outliers to address potential issues or opportunities.User feedback—particularly from those who rated low in repeatability—could provide actionable data to refine content strategies.
+- The content has a good baseline acceptance, there is an opportunity to enhance user engagement through repeat interaction.
 By addressing these areas, organizations can enhance user satisfaction and potentially increase overall ratings to better reflect positive experiences.
 
