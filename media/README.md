@@ -1,5 +1,5 @@
 ### 1. Data Overview
-The dataset contains 1000 rows and 10 columns ratings across three categories: overall ratings, quality ratings, and repeatability ratings. Overall ratings have a mean of approximately 3.05, with a standard deviation of 0.76, indicating that most ratings are around the neutral point of the scale, with values ranging from a minimum of 1 to a maximum of 5. Quality ratings show slightly better scores with a mean of approximately 3.21. Repeatability ratings, on the other hand, have a mean of approximately 1.49, indicating a tendency toward lower scores.
+he dataset consists of 2652 entries with 8 columns. The key columns include date, language, type, title, by, and numerical ratings of overall, quality, and repeatability. Notably, there are missing values in the date and by columns, indicating areas for potential data cleansing or further investigation.
 
 ### 2. Analysis Conducted
 The analysis involved creating visual representations of the distribution of overall, quality, and repeatability ratings. Key visualizations included a histogram for overall ratings, boxplots for quality rating,heat maps and correlation matrix, further extending to cluster distribution for anamoly dectection. Each chart provided insights into how ratings were distributed, highlighting concentrations of scores and trends in user sentiments.
