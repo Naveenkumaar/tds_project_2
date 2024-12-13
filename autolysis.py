@@ -62,15 +62,26 @@ def create_alternative_visualizations(df, folder):
     try:
         sns.set(style="whitegrid")
         plt.figure(figsize=(12, 8))
- 
-        # Visualization 1: Pairplot for numerical columns
+        
+        # Visualization 1: Histogram for numerical columns
         numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
-        if len(numeric_cols) > 1:
-            sns.pairplot(df[numeric_cols])
-            plt.savefig(f"{folder}/pairplot.png", dpi=100)
-            plt.close()
-            print("Pairplot saved.")
- 
+        num_cols = len(numeric_cols)
+        rows = math.ceil(num_cols / 3)  # Adjust number of columns per row if needed
+        fig, axes = plt.subplots(rows, 3, figsize=(15, 5 * rows))  # 3 columns per row
+        axes = axes.flatten()  # Flatten for easy iteration
+        for i, col in enumerate(numeric_cols):
+            sns.histplot(df[col], bins=30, ax=axes[i], kde=True)  # Add kde=True for density overlay
+            axes[i].set_title(f'Distribution of {col}')
+            axes[i].set_xlabel(col)
+            axes[i].set_ylabel("Frequency")
+        # Hide any unused subplots
+        for j in range(i + 1, len(axes)):
+            fig.delaxes(axes[j])
+        plt.tight_layout()
+        plt.savefig(f"{folder}/subplots_histograms.png", dpi=100)
+        plt.close()
+        print("Subplots histograms saved.")
+
         # Visualization 2: Boxplot
         if len(numeric_cols) > 0:
             sns.boxplot(data=df[numeric_cols])
@@ -88,10 +99,10 @@ def create_alternative_visualizations(df, folder):
             plt.savefig(f"{folder}/heatmap.png", dpi=100)
             plt.close()
             print("Heatmap saved.")
- 
+  
     except Exception as e:
         print(f"Error while generating alternative visualizations: {e}")
- 
+
 def read_confidently(filename):
     """Detect encoding and return decoded text, encoding, and confidence level."""
     filepath = Path(filename)
