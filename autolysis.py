@@ -92,6 +92,16 @@ def create_alternative_visualizations(df, folder):
     except Exception as e:
         print(f"Error while generating alternative visualizations: {e}")
  
+def read_confidently(filename):
+    """Detect encoding and return decoded text, encoding, and confidence level."""
+    filepath = Path(filename)
+    # We must read as binary (bytes) because we don't yet know encoding
+    blob = filepath.read_bytes()
+    detection = chardet.detect(blob)
+    encoding = detection["encoding"]
+    text = blob.decode(encoding)
+    return text, encoding
+ 
 def main():
     print("Hello from project2!")
  
@@ -104,9 +114,12 @@ def main():
  
     # Upload the file manually
     print("Please upload your CSV file.")
+
+
  
     actual_file_path = f"./datasets/{filename}"
-    df = pd.read_csv(actual_file_path, encoding='latin-1')
+    text, encoding = read_confidently(actual_file_path)
+    df = pd.read_csv(actual_file_path, encoding= encoding)
     folder = filename.split('/')[-1].replace('.csv', '')
  
     current_directory = os.path.dirname(__file__)
@@ -162,6 +175,17 @@ def main():
  
     # Final narration generation
     image1, image2, image3 = [file.split('/')[-1] for file in file_list[:3]]
+    # data = {
+    #     "model": "gpt-4o-mini",
+    #     "messages": [
+    #         {"role": "system", "content": f"{generate_readme(df)}"},
+    #         {"role": "user", "content": json.dumps(message)},
+    #         {"role": "user", "content": f"chart name is {image1} and chart description is {image_description[0]}"},
+    #         {"role": "user", "content": f"chart name is {image2} and chart description is {image_description[1]}"},
+    #         {"role": "user", "content": f"chart name is {image3} and chart description is {image_description[2]}"},
+    #         {"role": "user", "content": f"chart name is {image4} and chart description is {image_description[3]}"}
+    #     ]
+    # }
  
     data = {
         "model": "gpt-4o-mini",
