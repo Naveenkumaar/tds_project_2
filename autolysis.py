@@ -6,6 +6,9 @@
 #     "pandas",
 #     "requests",
 #     "seaborn",
+#     "cchardet",
+#     "httpx",
+#     "pandas",
 # ]
 # ///
 
