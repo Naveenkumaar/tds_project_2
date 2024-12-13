@@ -94,14 +94,14 @@ def create_alternative_visualizations(df, folder):
             plt.close()
             print("Boxplot saved.")
  
-        # Visualization 3: Heatmap of Correlation Matrix
+        # Visualization 3: Clustermap with Correlation Matrix
         if len(numeric_cols) > 1:
             corr_matrix = df[numeric_cols].corr()
-            sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
-            plt.title("Correlation Matrix Heatmap")
-            plt.savefig(f"{folder}/heatmap.png", dpi=100)
+            sns.clustermap(corr_matrix, annot=True, cmap="coolwarm", fmt=".1f")
+            plt.title("Correlation Matrix clustermap")
+            plt.savefig(f"{folder}/clustermap.png", dpi=100)
             plt.close()
-            print("Heatmap saved.")
+            print("clustermap saved.")
   
     except Exception as e:
         print(f"Error while generating alternative visualizations: {e}")
