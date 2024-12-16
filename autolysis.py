@@ -151,12 +151,6 @@ def main():
     # Upload the file manually
     print("Please upload your CSV file.")
 
-    # if filenames == "*":
-    #     dataset_path = "./datasets"
-    #     filenames = get_csv_files(dataset_path)
-    #     if len(filenames) == 0:
-    #         dataset_path = "../datasets"
-    #         filenames = get_csv_files(dataset_path)
         
     for filename in filenames:
         try:
@@ -222,39 +216,25 @@ def main():
                 print("Insights from the generated charts done successfully...")
             else:
                 print(f"Error: {response.json()}")
-    
-        # Final narration generation
-        image1, image2, image3 = [file.split('/')[-1] for file in file_list[:3]]
-        # data = {
-        #     "model": "gpt-4o-mini",
-        #     "messages": [
-        #         {"role": "system", "content": f"{generate_readme(df)}"},
-        #         {"role": "user", "content": json.dumps(message)},
-        #         {"role": "user", "content": f"chart name is {image1} and chart description is {image_description[0]}"},
-        #         {"role": "user", "content": f"chart name is {image2} and chart description is {image_description[1]}"},
-        #         {"role": "user", "content": f"chart name is {image3} and chart description is {image_description[2]}"},
-        #         {"role": "user", "content": f"chart name is {image4} and chart description is {image_description[3]}"}
-        #     ]
-        # }
-    
+         
         data = {
-    "model": "gpt-4o-mini",
-    "messages": [
-        {
-            "role": "system",
-            "content": generate_readme(df),
-        },
-        {
-            "role": "user",
-            "content": " ".join(
-                [
-                    f"chart name is {file.split('/')[-1]} and chart description is {desc}"
-                    for file, desc in zip(file_list[:len(image_description)], image_description)
-                ]
-            ) + f" and {json.dumps(message)}",
-        },
-    ],
-}
+            "model": "gpt-4o-mini",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": generate_readme(df),
+                },
+                {
+                    "role": "user",
+                    "content": " ".join(
+                        [
+                            f"chart name is {file.split('/')[-1]} and chart description is {desc}"
+                            for file, desc in zip(file_list[:len(image_description)], image_description)
+                        ]
+                    ) + f" and {json.dumps(message)}",
+                },
+            ],
+        }
         response = requests.post("https://aiproxy.sanand.workers.dev/openai/v1/chat/completions", headers=headers, json=data)
     
         if response.status_code == 200:
@@ -262,10 +242,11 @@ def main():
             output = response_json['choices'][0]['message']['content']
             print("Final content of analysis has been generated successfully.")
         else:
+            output = str(response.json())
             print(f"Error: {response.json()}")
     
-        with open(f"{folder}/README.md", 'w') as file:
-            file.write(output)
+        with open(f"{folder}/README.md", 'w') as file_:
+            file_.write(output)
             print("Program run completed successfully.")
  
 if __name__ == "__main__":
