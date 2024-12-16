@@ -238,13 +238,23 @@ def main():
         # }
     
         data = {
-            "model": "gpt-4o-mini",
-            "messages": [
-                {"role": "system", "content": f"{generate_readme(df)}"},
-                {"role": "user", "content": f"chart name is {image1} and chart description is {image_description[0]} and chart name is {image2} and chart description is {image_description[1]} and chart name is {image3} and chart description is {image_description[2]} and {json.dumps(message)}"}
-            ]
-        }
-    
+    "model": "gpt-4o-mini",
+    "messages": [
+        {
+            "role": "system",
+            "content": generate_readme(df),
+        },
+        {
+            "role": "user",
+            "content": " ".join(
+                [
+                    f"chart name is {file.split('/')[-1]} and chart description is {desc}"
+                    for file, desc in zip(file_list[:len(image_description)], image_description)
+                ]
+            ) + f" and {json.dumps(message)}",
+        },
+    ],
+}
         response = requests.post("https://aiproxy.sanand.workers.dev/openai/v1/chat/completions", headers=headers, json=data)
     
         if response.status_code == 200:
