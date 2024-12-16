@@ -21,7 +21,6 @@ import base64
 
 from pathlib import Path
 import sys
-import cchardet as chardet
  
 import pandas as pd
 import seaborn as sns
@@ -112,15 +111,32 @@ def create_alternative_visualizations(df, folder):
     except Exception as e:
         print(f"Error while generating alternative visualizations: {e}")
 
+
+def detect_encoding(filepath):
+    """Detect encoding without additional package."""
+    with open(filepath, 'rb') as f:
+        raw_data = f.read(10000)  # Read a portion of the file
+    encodings = ["utf-8", "utf-16", "latin1"]  # Common encodings to try
+    for encoding in encodings:
+        try:
+            raw_data.decode(encoding)
+            return encoding
+        except (UnicodeDecodeError, LookupError):
+            continue
+    return "utf-8"  # Fallback to utf-8
+ 
 def read_confidently(filename):
-    """Detect encoding and return decoded text, encoding, and confidence level."""
+    """Detect encoding and return decoded text and encoding."""
     filepath = Path(filename)
-    # We must read as binary (bytes) because we don't yet know encoding
-    blob = filepath.read_bytes()
-    detection = chardet.detect(blob)
-    encoding = detection["encoding"]
-    text = blob.decode(encoding)
+    encoding = detect_encoding(filepath)
+    with open(filepath, encoding=encoding) as f:
+        text = f.read()
     return text, encoding
+
+def get_csv_files(folder_path):
+    files = os.listdir(folder_path)
+    csv_files = [file for file in files if file.endswith('.csv')]
+    return csv_files
  
 def main():
     print("Hello from project2!")
@@ -135,102 +151,116 @@ def main():
     # Upload the file manually
     print("Please upload your CSV file.")
 
-
- 
-    actual_file_path = f"./datasets/{filename}"
-    text, encoding = read_confidently(actual_file_path)
-    df = pd.read_csv(actual_file_path, encoding= encoding)
-    folder = filename.split('/')[-1].replace('.csv', '')
- 
-    current_directory = os.path.dirname(__file__)
-    folder = os.path.join(current_directory, folder)
-   
-    # Create the folder with file name to store the results
-    try:
-        os.mkdir(folder)
-        print('Folder created successfully')
-    except:
-        print('Folder already present')
- 
-    message = ''
-    buffer = StringIO()
-    df.info(buf=buffer)
-    text = buffer.getvalue()
- 
-    message = {'dataframe column details': text}
-    text = df.describe().to_dict()
-    message['dataframe describe'] = text
- 
-    # Generate alternative visualizations directly
-    create_alternative_visualizations(df, folder)
- 
-    # Convert images to base64
-    file_list = glob.glob(f"{folder}/*.png")
-    image_list = []
-    for image in file_list:
-        with open(image, 'rb') as image_file:
-            encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
-            image_list.append(encoded_image)
- 
-    image_description = []
-    for image in file_list:
+    # if filenames == "*":
+    #     dataset_path = "./datasets"
+    #     filenames = get_csv_files(dataset_path)
+    #     if len(filenames) == 0:
+    #         dataset_path = "../datasets"
+    #         filenames = get_csv_files(dataset_path)
+        
+    for filename in filenames:
+        try:
+            dataset_path = "./datasets"
+            actual_file_path = f"{dataset_path}/{filename}"         
+            text, encoding = read_confidently(actual_file_path)
+            df = pd.read_csv(actual_file_path, encoding = encoding)
+            folder = filename.split('/')[-1].replace('.csv', '')
+        except:
+            dataset_path = "../datasets"
+            actual_file_path = f"{dataset_path}/{filename}"
+            text, encoding = read_confidently(actual_file_path)
+            df = pd.read_csv(actual_file_path, encoding = encoding)
+            folder = filename.split('/')[-1].replace('.csv', '')
+    
+        current_directory = os.path.dirname(__file__)
+        folder = os.path.join(current_directory, folder)
+    
+        # Create the folder with file name to store the results
+        try:
+            os.mkdir(folder)
+            print('Folder created successfully')
+        except:
+            print('Folder already present')
+    
+        message = ''
+        buffer = StringIO()
+        df.info(buf=buffer)
+        text = buffer.getvalue()
+    
+        message = {'dataframe column details': text}
+        text = df.describe().to_dict()
+        message['dataframe describe'] = text
+    
+        # Generate alternative visualizations directly
+        create_alternative_visualizations(df, folder)
+    
+        # Convert images to base64
+        file_list = glob.glob(f"{folder}/*.png")
+        image_list = []
+        for image in file_list:
+            with open(image, 'rb') as image_file:
+                encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+                image_list.append(encoded_image)
+    
+        image_description = []
+        for image in file_list:
+            data = {
+                "model": "gpt-4o-mini",
+                "messages": [
+                    {"role": "system", "content": f"You will be given a chart from {filename} dataset, get insights from this {image.split('/')[-1]} image"},
+                    {"role": "user", "content": [
+                        {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{encoded_image}", "detail": "low"}}
+                    ]}
+                ]
+            }
+    
+            response = requests.post("https://aiproxy.sanand.workers.dev/openai/v1/chat/completions", headers=headers, json=data)
+    
+            if response.status_code == 200:
+                response_json = response.json()
+                image_description.append(response_json['choices'][0]['message']['content'])
+                print("Insights from the generated charts done successfully...")
+            else:
+                print(f"Error: {response.json()}")
+    
+        # Final narration generation
+        image1, image2, image3 = [file.split('/')[-1] for file in file_list[:3]]
+        # data = {
+        #     "model": "gpt-4o-mini",
+        #     "messages": [
+        #         {"role": "system", "content": f"{generate_readme(df)}"},
+        #         {"role": "user", "content": json.dumps(message)},
+        #         {"role": "user", "content": f"chart name is {image1} and chart description is {image_description[0]}"},
+        #         {"role": "user", "content": f"chart name is {image2} and chart description is {image_description[1]}"},
+        #         {"role": "user", "content": f"chart name is {image3} and chart description is {image_description[2]}"},
+        #         {"role": "user", "content": f"chart name is {image4} and chart description is {image_description[3]}"}
+        #     ]
+        # }
+    
         data = {
             "model": "gpt-4o-mini",
             "messages": [
-                {"role": "system", "content": f"You will be given a chart from {filename} dataset, get insights from this {image.split('/')[-1]} image"},
-                {"role": "user", "content": [
-                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{encoded_image}", "detail": "low"}}
-                ]}
+                {"role": "system", "content": f"{generate_readme(df)}"},
+                {"role": "user", "content": f"chart name is {image1} and chart description is {image_description[0]} and chart name is {image2} and chart description is {image_description[1]} and chart name is {image3} and chart description is {image_description[2]} and {json.dumps(message)}"}
             ]
         }
- 
+    
         response = requests.post("https://aiproxy.sanand.workers.dev/openai/v1/chat/completions", headers=headers, json=data)
- 
+    
         if response.status_code == 200:
             response_json = response.json()
-            image_description.append(response_json['choices'][0]['message']['content'])
-            print("Insights from the generated charts done successfully...")
+            output = response_json['choices'][0]['message']['content']
+            print("Final content of analysis has been generated successfully.")
         else:
-            print(f"Error: {response.status_code}")
- 
-    # Final narration generation
-    image1, image2, image3 = [file.split('/')[-1] for file in file_list[:3]]
-    # data = {
-    #     "model": "gpt-4o-mini",
-    #     "messages": [
-    #         {"role": "system", "content": f"{generate_readme(df)}"},
-    #         {"role": "user", "content": json.dumps(message)},
-    #         {"role": "user", "content": f"chart name is {image1} and chart description is {image_description[0]}"},
-    #         {"role": "user", "content": f"chart name is {image2} and chart description is {image_description[1]}"},
-    #         {"role": "user", "content": f"chart name is {image3} and chart description is {image_description[2]}"},
-    #         {"role": "user", "content": f"chart name is {image4} and chart description is {image_description[3]}"}
-    #     ]
-    # }
- 
-    data = {
-        "model": "gpt-4o-mini",
-        "messages": [
-            {"role": "system", "content": f"{generate_readme(df)}"},
-            {"role": "user", "content": f"chart name is {image1} and chart description is {image_description[0]} and chart name is {image2} and chart description is {image_description[1]} and chart name is {image3} and chart description is {image_description[2]} and {json.dumps(message)}"}
-        ]
-    }
-   
-    response = requests.post("https://aiproxy.sanand.workers.dev/openai/v1/chat/completions", headers=headers, json=data)
- 
-    if response.status_code == 200:
-        response_json = response.json()
-        output = response_json['choices'][0]['message']['content']
-        print("Final content of analysis has been generated successfully.")
-    else:
-        print(f"Error: {response.status_code}")
- 
-    with open(f"{folder}/README.md", 'w') as file:
-        file.write(output)
-        print("Program run completed successfully.")
+            print(f"Error: {response.json()}")
+    
+        with open(f"{folder}/README.md", 'w') as file:
+            file.write(output)
+            print("Program run completed successfully.")
  
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        filename = sys.argv[1]
+        filenames = sys.argv[1:]
         main()
     else:
         print("Usage: uv run autolysis.py <CSV_FILENAME>")
